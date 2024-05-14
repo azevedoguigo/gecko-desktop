@@ -1,6 +1,11 @@
+import { BrowserRouter } from "react-router-dom";
+import Router from "./Router";
+
 function App() {
   return (
-    <h1 className="text-red-500 text-2xl">Olá, mundo!</h1>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
   )
 }
 
