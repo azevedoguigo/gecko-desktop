@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-
+import Sidebar from "../components/Sidebar"
 
 function HomePage() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ function HomePage() {
   })
   return(
     <div>
-      Home page
+      <Sidebar />
     </div>
   )
 }
