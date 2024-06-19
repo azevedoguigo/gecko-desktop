@@ -1,4 +1,4 @@
-import ITaskApi, { ICreateTaskResponse, IGetTaskResponse } from "../types/api/TaskApi.types.ts"
+import ITaskApi, { ICreateTaskResponse, IGetTaskResponse, IUpdateTaskResponse } from "../types/api/TaskApi.types.ts"
 
 export default class TaskApi extends ITaskApi {
   public createTask = async (title: string, description: string): Promise<ICreateTaskResponse> => {
@@ -29,6 +29,26 @@ export default class TaskApi extends ITaskApi {
         return data
       }).catch(error => {
         console.log(error)
+      })
+  }
+
+  public updateTask = async (id: string, completed: boolean): Promise<IUpdateTaskResponse> => {
+    return await this.api.put("/tasks", {
+      completed
+    },
+    { 
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      params: {
+        id
+      }
+     })
+      .then(response => response.data)
+      .then(data => {
+        return data
+      }).catch(error => {
+        console.log(error.message)
       })
   }
 }

@@ -10,6 +10,7 @@ const taskApi = new TaskApi(api)
 
 function HomePage() {
   const [tasks, setTasks] = useState<IGetTaskResponse[]>()
+  const [completed, setCompleted] = useState(true)
 
   const navigate = useNavigate()
 
@@ -20,6 +21,20 @@ function HomePage() {
       const response = await taskApi.getTasks()
 
       setTasks(response)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  async function handleChecked(id: string) {
+    try {
+      setCompleted(!completed)
+      console.log(`before ${completed}`)
+      const response = await taskApi.updateTask(id, completed)
+      
+      console.log(response.message)
+      setCompleted(false)
+      reloadTasks()
     } catch(error) {
       console.log(error)
     }
@@ -75,7 +90,8 @@ function HomePage() {
                   <td className="flex items-center justify-center">
                     <input 
                       type="checkbox" 
-                      defaultChecked={ task.completed } 
+                      defaultChecked={ task.completed }
+                      onChange={ () => handleChecked(task.id) }
                       className="checkbox" 
                     />
                   </td>
