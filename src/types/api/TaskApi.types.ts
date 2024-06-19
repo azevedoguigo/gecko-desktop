@@ -31,4 +31,6 @@ export default abstract class ITaskApi {
   }
 
   public abstract getTasks(): Promise<IGetTaskResponse[]>
+  public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
+
 }

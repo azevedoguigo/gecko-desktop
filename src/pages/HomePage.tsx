@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar"
 import TaskApi from "../api/Task.api"
 import api from "../config/api"
 import { IGetTaskResponse } from "../types/api/TaskApi.types"
-import { FaPlus } from "react-icons/fa"
+import AddTaskModal from "../components/AddTaskModal"
 
 const taskApi = new TaskApi(api)
 
@@ -14,6 +14,16 @@ function HomePage() {
   const navigate = useNavigate()
 
   const token = localStorage.getItem("token")
+
+  async function reloadTasks() {
+    try {
+      const response = await taskApi.getTasks()
+
+      setTasks(response)
+    } catch(error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     if (!token) {
@@ -48,7 +58,9 @@ function HomePage() {
                 <th>Completed</th>
                 <th>Created At</th>
                 <th>Last Update</th>
-                <th className="flex flex-row items-center gap-2"><FaPlus /> Add</th>
+                <th>
+                  <AddTaskModal reloadTasks={ reloadTasks }/>
+                </th>
               </tr>
             </thead>
             <tbody>
