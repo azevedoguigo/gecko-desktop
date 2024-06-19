@@ -7,7 +7,7 @@ export default class UserApi extends IUserApi {
       .then(data => {
         localStorage.setItem("token", data.data)
 
-        return data.data
+        return data
       }).catch(error => {
         console.log(error)
       })

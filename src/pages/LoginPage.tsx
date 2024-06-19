@@ -16,7 +16,7 @@ function LoginPage() {
 
     try {
       const response = await userApi.login(email, password)
-
+      
       if(response.data) {
         navigate("/")
       }
