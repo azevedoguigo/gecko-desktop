@@ -4,6 +4,10 @@ export type ILoginResponse = {
   data: string
 }
 
+export type IMessageResponse = {
+  message: string
+}
+
 export default abstract class IUserApi {
   protected api: AxiosInstance
 
