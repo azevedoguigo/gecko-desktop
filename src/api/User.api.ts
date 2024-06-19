@@ -2,12 +2,12 @@ import IUserApi, { ILoginResponse, IMessageResponse } from "../types/api/UserApi
 
 export default class UserApi extends IUserApi {
   public login = async (email: string, password: string): Promise<ILoginResponse> => {
-    return await this.api.post("login", { email, password })
+    return await this.api.post("/login", { email, password })
       .then(response => response.data)
       .then(data => {
-        localStorage.setItem("token", data)
+        localStorage.setItem("token", data.data)
 
-        return data
+        return data.data
       }).catch(error => {
         console.log(error)
       })
