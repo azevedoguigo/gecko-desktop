@@ -9,7 +9,8 @@ export default class UserApi extends IUserApi {
 
         return data
       }).catch(error => {
-        console.log(error)
+        console.log(error.response.data.message)
+        throw error.response
       })
   }
 
@@ -20,7 +21,7 @@ export default class UserApi extends IUserApi {
         
         return data
       }).catch(error => {
-        console.log(error)
+        throw error.response.data
       })
   }
 }
