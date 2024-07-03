@@ -5,6 +5,7 @@ import TaskApi from "../api/Task.api"
 import api from "../config/api"
 import { IGetTaskResponse } from "../types/api/TaskApi.types"
 import AddTaskModal from "../components/AddTaskModal"
+import { toast } from "react-toastify"
 
 const taskApi = new TaskApi(api)
 
@@ -22,7 +23,7 @@ function HomePage() {
 
       setTasks(response)
     } catch(error) {
-      console.log(error)
+      toast.error("Error to reload task list!", { theme: "colored" })
     }
   }
 
@@ -36,7 +37,7 @@ function HomePage() {
       setCompleted(false)
       reloadTasks()
     } catch(error) {
-      console.log(error)
+      toast.error("Error marking task as completed!", { theme: "colored" })
     }
   }
 
@@ -51,7 +52,7 @@ function HomePage() {
 
         setTasks(response)
       } catch(error) {
-        console.log(error)
+        toast.error("Error to load task list!", { theme: "colored" })
       }
     }
 

@@ -2,6 +2,8 @@ import { FormEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import UserApi from "../api/User.api"
 import api from "../config/api"
+import { ICreateUserRequestError } from "../types/api/UserApi.types"
+import { toast } from "react-toastify"
 
 const userApi = new UserApi(api)
 
@@ -18,10 +20,20 @@ function RegisterPage() {
     try {
       const response = await userApi.register(name, email, password)
 
-      console.log(response.message)
+      toast.success(response.message, { theme:"colored" })
       navigate("/login")
     } catch(error) {
-      console.log(error)
+      const requestErros = error as ICreateUserRequestError
+      
+      if(requestErros.errors.name) {
+        toast.warning(`Name ${requestErros.errors.name[0]}`, { theme: "colored" })
+      } else if(requestErros.errors.email) {
+        toast.warning(`Email ${requestErros.errors.email[0]}`, { theme: "colored" })
+      } else if(requestErros.errors.password) {
+        toast.warning(`Password ${requestErros.errors.password[0]}`, { theme: "colored" })
+      } else {
+        toast.error("Internal server error", { theme: "colored" })
+      }
     }
   }
 

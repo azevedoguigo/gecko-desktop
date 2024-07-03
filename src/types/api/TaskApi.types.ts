@@ -40,6 +40,13 @@ export type IMessageResponse = {
   message: string
 }
 
+export type ICreateTaskRequestError = {
+  errors: {
+    title: string[],
+    description: string[]
+  }
+}
+
 export default abstract class ITaskApi {
   protected api: AxiosInstance
 
