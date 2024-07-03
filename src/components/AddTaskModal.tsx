@@ -13,6 +13,11 @@ const AddTaskModal: React.FC<Props> = ({ reloadTasks }) => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
+  function cleanInputs() {
+    setTitle("")
+    setDescription("")
+  }
+
   async function handleCreateTask(e: FormEvent<HTMLElement>) {
     e.preventDefault()
 
@@ -22,6 +27,7 @@ const AddTaskModal: React.FC<Props> = ({ reloadTasks }) => {
 
       console.log(response.message)
       reloadTasks()
+      cleanInputs()
     } catch(error) {
       console.log(error)
     }
@@ -50,6 +56,7 @@ const AddTaskModal: React.FC<Props> = ({ reloadTasks }) => {
                 type="text" 
                 className="grow" 
                 placeholder="Title" 
+                value={ title }
                 onChange={(e) => setTitle(e.target.value)}
               />
             </label>
@@ -59,6 +66,7 @@ const AddTaskModal: React.FC<Props> = ({ reloadTasks }) => {
                 type="text" 
                 className="grow" 
                 placeholder="Description" 
+                value={ description }
                 onChange={(e) => setDescription(e.target.value)}  
               />
             </label>
