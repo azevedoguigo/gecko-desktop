@@ -8,6 +8,14 @@ export type IMessageResponse = {
   message: string
 }
 
+export type ICreateUserRequestError = {
+  errors: {
+    name: string[],
+    email: string[],
+    password: string[]
+  }
+}
+
 export type ILoginRequestError = {
   data: {
     message: string
@@ -22,4 +30,5 @@ export default abstract class IUserApi {
   }
 
   public abstract login(email: string, password: string): Promise<ILoginResponse>
+  public abstract register(name: string, email: string, password: string): Promise<IMessageResponse>
 }

@@ -21,7 +21,7 @@ export default class UserApi extends IUserApi {
         
         return data
       }).catch(error => {
-        console.log(error)
+        throw error.response.data
       })
   }
 }
