@@ -4,6 +4,8 @@ import UserApi from "../api/User.api"
 import api from "../config/api"
 import EmailIcon from "../components/Icons/EmailIcon"
 import KeyIcon from "../components/Icons/KeyIcon"
+import { ILoginRequestError } from "../types/api/UserApi.types"
+import { toast } from "react-toastify"
 
 const userApi = new UserApi(api)
 
@@ -17,13 +19,17 @@ function LoginPage() {
     e.preventDefault()
 
     try {
-      const response = await userApi.login(email, password)
+      await userApi.login(email, password)
       
-      if(response.data) {
-        navigate("/")
-      }
+      navigate("/")
     } catch(error) {
-      console.log(error)
+      const requestError = error as ILoginRequestError
+
+      if (requestError.data.message) {
+        toast.warning(requestError.data.message, { theme: "colored" })
+      } else {
+        toast.error("Internal server error!", { theme: "colored" })
+      }
     }
   }
 
