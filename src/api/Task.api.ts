@@ -14,7 +14,7 @@ export default class TaskApi extends ITaskApi {
       .then(data => {
         return data
       }).catch(error => {
-        console.log(error.message)
+        throw error.response.data
       })
   }
 

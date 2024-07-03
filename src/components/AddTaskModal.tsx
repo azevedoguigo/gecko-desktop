@@ -2,6 +2,8 @@ import { FormEvent, useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import TaskApi from "../api/Task.api"
 import api from "../config/api"
+import { toast } from "react-toastify"
+import { ICreateTaskRequestError } from "../types/api/TaskApi.types"
 
 const taskApi = new TaskApi(api)
 
@@ -22,14 +24,27 @@ const AddTaskModal: React.FC<Props> = ({ reloadTasks }) => {
     e.preventDefault()
 
     try {
-      console.log(title, description)
       const response = await taskApi.createTask(title, description)
 
-      console.log(response.message)
       reloadTasks()
       cleanInputs()
+      toast.success(response.message, {theme: "colored"})
     } catch(error) {
-      console.log(error)
+      const requestErros = error as ICreateTaskRequestError
+
+      if (requestErros.errors.title) {
+        toast.warning(
+          `Title ${requestErros.errors.title[0]}`, 
+          { theme: "colored" }
+        )
+      } else if (requestErros.errors.description) {
+        toast.warning(
+          `Description ${requestErros.errors.description[0]}`, 
+          { theme: "colored" }
+        )
+      } else {
+        toast.error("Internal server error", { theme: "colored" })
+      }
     }
   }
 
