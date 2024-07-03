@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import UserApi from "../api/User.api"
 import api from "../config/api"
 
@@ -10,6 +10,8 @@ function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const navigate = useNavigate()
+
   async function handleRegister(e:FormEvent<HTMLElement>) {
     e.preventDefault()
 
@@ -17,6 +19,7 @@ function RegisterPage() {
       const response = await userApi.register(name, email, password)
 
       console.log(response.message)
+      navigate("/login")
     } catch(error) {
       console.log(error)
     }
