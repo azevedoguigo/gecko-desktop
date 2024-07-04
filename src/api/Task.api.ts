@@ -1,4 +1,9 @@
-import ITaskApi, { ICreateTaskResponse, IGetTaskResponse, IUpdateTaskResponse } from "../types/api/TaskApi.types.ts"
+import ITaskApi, { 
+  ICreateTaskResponse, 
+  IGetTaskResponse, 
+  IMessageResponse, 
+  IUpdateTaskResponse 
+} from "../types/api/TaskApi.types.ts"
 
 export default class TaskApi extends ITaskApi {
   public createTask = async (title: string, description: string): Promise<ICreateTaskResponse> => {
@@ -49,6 +54,24 @@ export default class TaskApi extends ITaskApi {
         return data
       }).catch(error => {
         console.log(error.message)
+      })
+  }
+
+  public deleteTask = async (id: string): Promise<IMessageResponse> => {
+    return await this.api.delete("/tasks",
+    { 
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      params: {
+        id
+      }
+     })
+      .then(response => response.data)
+      .then(data => {
+        return data
+      }).catch(error => {
+        throw error.response
       })
   }
 }

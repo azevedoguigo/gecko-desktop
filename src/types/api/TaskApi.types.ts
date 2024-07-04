@@ -47,6 +47,13 @@ export type ICreateTaskRequestError = {
   }
 }
 
+export type IDeleteTaskResponseError = {
+  data: {
+    message: string,
+    status: number
+  }
+}
+
 export default abstract class ITaskApi {
   protected api: AxiosInstance
 
@@ -57,4 +64,5 @@ export default abstract class ITaskApi {
   public abstract getTasks(): Promise<IGetTaskResponse[]>
   public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
   public abstract updateTask(id: string, completed: boolean): Promise<IUpdateTaskResponse>
+  public abstract deleteTask(id: string): Promise<IMessageResponse>
 }

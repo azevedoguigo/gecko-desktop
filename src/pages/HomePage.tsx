@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import TaskApi from "../api/Task.api"
 import api from "../config/api"
-import { IGetTaskResponse } from "../types/api/TaskApi.types"
+import { IDeleteTaskResponseError, IGetTaskResponse } from "../types/api/TaskApi.types"
 import AddTaskModal from "../components/AddTaskModal"
 import { toast } from "react-toastify"
+import { FaTrash } from "react-icons/fa"
 
 const taskApi = new TaskApi(api)
 
@@ -38,6 +39,25 @@ function HomePage() {
       reloadTasks()
     } catch(error) {
       toast.error("Error marking task as completed!", { theme: "colored" })
+    }
+  }
+
+  async function handleDeleteTask(id: string) {
+    try {
+      const response = await taskApi.deleteTask(id)
+
+      toast.success(response.message, { theme: "colored" })
+      reloadTasks()
+    } catch (error) {
+      const responseError = error as IDeleteTaskResponseError
+
+      if (responseError.data.status == 404) {
+        toast.warning(responseError.data.message, { theme: "colored" })
+      } else if (responseError.data.status == 400) {
+        toast.error(responseError.data.message, { theme: "colored" })
+      } else {
+        toast.error("Internal server error!", { theme: "colored" })
+      }
     }
   }
 
@@ -95,6 +115,13 @@ function HomePage() {
                       onChange={ () => handleChecked(task.id) }
                       className="checkbox" 
                     />
+
+                    <button 
+                      className="ml-4"
+                      onClick={() => handleDeleteTask(task.id)}
+                    >
+                      <FaTrash size={25} />
+                    </button>
                   </td>
                 </tr>
               })}
