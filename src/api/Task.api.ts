@@ -37,7 +37,28 @@ export default class TaskApi extends ITaskApi {
       })
   }
 
-  public updateTask = async (id: string, completed: boolean): Promise<IUpdateTaskResponse> => {
+  public updateTask = async (id: string, title: string, description: string): Promise<IUpdateTaskResponse> => {
+    return await this.api.put("/tasks", {
+      title,
+      description
+    },
+    { 
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      params: {
+        id
+      }
+     })
+      .then(response => response.data)
+      .then(data => {
+        return data
+      }).catch(error => {
+        throw error.response.data
+      })
+  }
+
+  public updateTaskToCompleted = async (id: string, completed: boolean): Promise<IUpdateTaskResponse> => {
     return await this.api.put("/tasks", {
       completed
     },
