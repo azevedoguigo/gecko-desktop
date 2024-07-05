@@ -37,7 +37,7 @@ export default class TaskApi extends ITaskApi {
       })
   }
 
-  public updateTask = async (id: string, completed: boolean): Promise<IUpdateTaskResponse> => {
+  public updateTaskToCompleted = async (id: string, completed: boolean): Promise<IUpdateTaskResponse> => {
     return await this.api.put("/tasks", {
       completed
     },

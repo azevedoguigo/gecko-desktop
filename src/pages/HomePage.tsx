@@ -31,10 +31,9 @@ function HomePage() {
   async function handleChecked(id: string) {
     try {
       setCompleted(!completed)
-      console.log(`before ${completed}`)
-      const response = await taskApi.updateTask(id, completed)
+
+      await taskApi.updateTaskToCompleted(id, completed)
       
-      console.log(response.message)
       setCompleted(false)
       reloadTasks()
     } catch(error) {

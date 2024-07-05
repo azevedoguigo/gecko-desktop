@@ -63,6 +63,6 @@ export default abstract class ITaskApi {
 
   public abstract getTasks(): Promise<IGetTaskResponse[]>
   public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
-  public abstract updateTask(id: string, completed: boolean): Promise<IUpdateTaskResponse>
+  public abstract updateTaskToCompleted(id: string, completed: boolean): Promise<IUpdateTaskResponse>
   public abstract deleteTask(id: string): Promise<IMessageResponse>
 }
