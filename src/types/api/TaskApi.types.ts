@@ -47,6 +47,13 @@ export type ICreateTaskRequestError = {
   }
 }
 
+export type IUpdateTaskRequestError = {
+  errors: {
+    title: string[],
+    description: string[]
+  }
+}
+
 export type IDeleteTaskResponseError = {
   data: {
     message: string,
@@ -63,6 +70,7 @@ export default abstract class ITaskApi {
 
   public abstract getTasks(): Promise<IGetTaskResponse[]>
   public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
+  public abstract updateTask(id: string, title: string, description: string): Promise<IUpdateTaskResponse>
   public abstract updateTaskToCompleted(id: string, completed: boolean): Promise<IUpdateTaskResponse>
   public abstract deleteTask(id: string): Promise<IMessageResponse>
 }

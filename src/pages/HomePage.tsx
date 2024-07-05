@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Sidebar from "../components/Sidebar"
-import TaskApi from "../api/Task.api"
-import api from "../config/api"
-import { IDeleteTaskResponseError, IGetTaskResponse } from "../types/api/TaskApi.types"
+import { FormEvent, useEffect, useState } from "react"
+import { 
+  IDeleteTaskResponseError, 
+  IGetTaskResponse, 
+  IUpdateTaskRequestError 
+} from "../types/api/TaskApi.types"
 import AddTaskModal from "../components/AddTaskModal"
 import { toast } from "react-toastify"
 import { FaTrash } from "react-icons/fa"
+import { FaPencil } from "react-icons/fa6"
+import { TbReload } from "react-icons/tb"
+import { useNavigate } from "react-router-dom"
+
+import Sidebar from "../components/Sidebar"
+import TaskApi from "../api/Task.api"
+import api from "../config/api"
 
 const taskApi = new TaskApi(api)
 
 function HomePage() {
   const [tasks, setTasks] = useState<IGetTaskResponse[]>()
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
   const [completed, setCompleted] = useState(true)
 
   const navigate = useNavigate()
@@ -38,6 +47,54 @@ function HomePage() {
       reloadTasks()
     } catch(error) {
       toast.error("Error marking task as completed!", { theme: "colored" })
+    }
+  }
+
+  function cleanInputs() {
+    setTitle("")
+    setDescription("")
+  }
+
+  async function handleUpdateTask(
+    e: FormEvent<HTMLElement>, 
+    id: string, 
+    actualTitle: string,
+    actualDescription: string
+  ) {
+    e.preventDefault()
+
+    try {
+      let newTitle = title
+      let newDescription = description
+      
+      if (!title)
+        newTitle = actualTitle
+
+      if (!description)
+        newDescription = actualDescription
+
+      const response = await taskApi.updateTask(id, newTitle, newDescription)
+
+      reloadTasks()
+      cleanInputs()
+      toast.success(response.message, {theme: "colored"})
+    } catch(error) {
+      const requestErros = error as IUpdateTaskRequestError
+      console.log(requestErros)
+
+      if (requestErros.errors.title) {
+        toast.warning(
+          `Title ${requestErros.errors.title[0]}`, 
+          { theme: "colored" }
+        )
+      } else if (requestErros.errors.description) {
+        toast.warning(
+          `Description ${requestErros.errors.description[0]}`, 
+          { theme: "colored" }
+        )
+      } else {
+        toast.error("Internal server error", { theme: "colored" })
+      }
     }
   }
 
@@ -93,7 +150,7 @@ function HomePage() {
                 <th>Completed</th>
                 <th>Created At</th>
                 <th>Last Update</th>
-                <th>
+                <th className="flex items-center justify-center">
                   <AddTaskModal reloadTasks={ reloadTasks }/>
                 </th>
               </tr>
@@ -114,6 +171,51 @@ function HomePage() {
                       onChange={ () => handleChecked(task.id) }
                       className="checkbox" 
                     />
+
+                    <details className="dropdown dropdown-end">
+                      <summary 
+                        className="ml-4"
+                      >
+                        <FaPencil size={25} />
+                      </summary>
+                      <div 
+                        className="menu dropdown-content bg-base-200 rounded-box z-[1] p-2 shadow"
+                      >
+                        <h3 className="flex items-center justify-center font-bold text-lg mb-2">
+                          Update Task
+                        </h3>
+
+                        <form
+                          className="flex flex-col gap-2"
+                          onSubmit={(e) => handleUpdateTask(e, task.id, task.title, task.description)}
+                        >
+                          <label className="input input-bordered flex items-center gap-2">
+                            <input 
+                              type="text" 
+                              className="grow" 
+                              placeholder="Title" 
+                              value={ title }
+                              onChange={(e) => setTitle(e.target.value)}
+                            />
+                          </label>
+
+                          <label className="input input-bordered flex items-center gap-2">
+                            <input 
+                              type="text" 
+                              className="grow" 
+                              placeholder="Description" 
+                              value={ description }
+                              onChange={(e) => setDescription(e.target.value)}  
+                            />
+                          </label>
+
+                          <button className="btn btn-primary text-lg font-bold mt-3">
+                            <TbReload />
+                            Update
+                          </button>
+                        </form>
+                      </div>
+                    </details>
 
                     <button 
                       className="ml-4"
