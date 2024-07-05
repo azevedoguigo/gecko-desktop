@@ -73,11 +73,18 @@ function HomePage() {
       if (!description)
         newDescription = actualDescription
 
-      const response = await taskApi.updateTask(id, newTitle, newDescription)
+      if (!title && !description) {
+        toast.warning(
+          "Provide at least one parameter to be updated.", 
+          { theme: "colored" }
+        )
+      } else {
+        const response = await taskApi.updateTask(id, newTitle, newDescription)
 
-      reloadTasks()
-      cleanInputs()
-      toast.success(response.message, {theme: "colored"})
+        reloadTasks()
+        cleanInputs()
+        toast.success(response.message, {theme: "colored"})
+      }
     } catch(error) {
       const requestErros = error as IUpdateTaskRequestError
       console.log(requestErros)
