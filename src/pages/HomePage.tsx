@@ -163,7 +163,7 @@ function HomePage() {
               </tr>
             </thead>
             <tbody>
-              {tasks?.map(task => {
+              {tasks?.length ? tasks.map(task => {
                 return <tr key={task.id}>
                   <th>{ task.id }</th>
                   <td>{ task.title }</td>
@@ -232,7 +232,7 @@ function HomePage() {
                     </button>
                   </td>
                 </tr>
-              })}
+              }) : <div></div> }
             </tbody>
           </table>
         </div>
