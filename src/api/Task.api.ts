@@ -1,6 +1,6 @@
 import ITaskApi, { 
   ICreateTaskResponse, 
-  IGetTaskResponse, 
+  IGetTasksResponse, 
   IMessageResponse, 
   IUpdateTaskResponse 
 } from "../types/api/TaskApi.types.ts"
@@ -23,10 +23,13 @@ export default class TaskApi extends ITaskApi {
       })
   }
 
-  public getTasks = async (): Promise<IGetTaskResponse[]> => {
+  public getTasks = async (page: number): Promise<IGetTasksResponse> => {
     return await this.api.get("/tasks/all", { 
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      params: {
+        page
       }
      })
       .then(response => response.data)
