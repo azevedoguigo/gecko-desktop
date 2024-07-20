@@ -31,7 +31,7 @@ function HomePage() {
     try {
       const response = await taskApi.getTasks()
 
-      setTasks(response)
+      setTasks(response.tasks)
     } catch(error) {
       toast.error("Error to reload task list!", { theme: "colored" })
     }
@@ -132,8 +132,7 @@ function HomePage() {
     async function loadTasks() {
       try {
         const response = await taskApi.getTasks()
-
-        setTasks(response)
+        setTasks(response.tasks)
       } catch(error) {
         toast.error("Error to load task list!", { theme: "colored" })
       }

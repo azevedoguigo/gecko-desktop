@@ -23,6 +23,16 @@ export type IGetTaskResponse = {
   user_id: string
 }
 
+export type IGetTasksResponse = {
+  pagination: {
+    page_number: number,
+    page_size: number,
+    total_entries: number,
+    total_pages: number
+  },
+  tasks: IGetTaskResponse[]
+}
+
 export type IUpdateTaskResponse = {
   task: {
     id: string,
@@ -68,7 +78,7 @@ export default abstract class ITaskApi {
     this.api = api
   }
 
-  public abstract getTasks(): Promise<IGetTaskResponse[]>
+  public abstract getTasks(): Promise<IGetTasksResponse>
   public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
   public abstract updateTask(id: string, title: string, description: string): Promise<IUpdateTaskResponse>
   public abstract updateTaskToCompleted(id: string, completed: boolean): Promise<IUpdateTaskResponse>
