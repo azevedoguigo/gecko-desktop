@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import TaskApi from "../api/Task.api"
 import api from "../config/api"
+import { jwtDecode } from "jwt-decode"
 
 const taskApi = new TaskApi(api)
 
@@ -126,6 +127,12 @@ function HomePage() {
 
   useEffect(() => {
     if (!token) {
+      navigate("/login")
+    }
+
+    const decodedToken = jwtDecode(token!)
+
+    if(Date.now() >= decodedToken.exp! * 1000) {
       navigate("/login")
     }
 
