@@ -24,15 +24,21 @@ function HomePage() {
   const [description, setDescription] = useState("")
   const [completed, setCompleted] = useState(true)
 
+  const [page, setPage] = useState<number>()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState<number>()
+
   const navigate = useNavigate()
 
   const token = localStorage.getItem("token")
 
   async function reloadTasks() {
     try {
-      const response = await taskApi.getTasks()
+      const response = await taskApi.getTasks(page!)
 
       setTasks(response.tasks)
+      setPage(response.pagination.page_number)
+      setTotalPages(response.pagination.total_pages)
     } catch(error) {
       toast.error("Error to reload task list!", { theme: "colored" })
     }
@@ -138,15 +144,19 @@ function HomePage() {
 
     async function loadTasks() {
       try {
-        const response = await taskApi.getTasks()
+        const response = await taskApi.getTasks(page!)
+        console.log(response.pagination.page_number)
+
         setTasks(response.tasks)
+        setPage(response.pagination.page_number)
+        setTotalPages(response.pagination.total_pages)
       } catch(error) {
         toast.error("Error to load task list!", { theme: "colored" })
       }
     }
 
     loadTasks()
-  }, [])
+  }, [page])
 
   return(
     <div className="flex">
@@ -241,6 +251,23 @@ function HomePage() {
               }) : <div></div> }
             </tbody>
           </table>
+
+          <div className="join flex justify-center mt-16">
+            {Array.from({ length: totalPages! }, (_, index) => (
+              <input
+                key={index}
+                className="join-item btn btn-square"
+                type="radio"
+                name="options"
+                aria-label={`${index + 1}`}
+                checked={currentPage === index + 1}
+                onChange={() => {
+                  setCurrentPage(index + 1)
+                  setPage(index + 1)
+                }}
+              />
+            ))}
+          </div>
         </div>
       </main>
     </div>

@@ -78,7 +78,7 @@ export default abstract class ITaskApi {
     this.api = api
   }
 
-  public abstract getTasks(): Promise<IGetTasksResponse>
+  public abstract getTasks(page: number, limit: number): Promise<IGetTasksResponse>
   public abstract createTask(title: string, description: string): Promise<ICreateTaskResponse>
   public abstract updateTask(id: string, title: string, description: string): Promise<IUpdateTaskResponse>
   public abstract updateTaskToCompleted(id: string, completed: boolean): Promise<IUpdateTaskResponse>
